@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movie Recommendations with Analysis</title>
+  <style>
+    body { margin:0; background:#141414; color:#fff; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    header { background:#141414; padding:20px; text-align:center; font-size:2rem; font-weight:bold; }
+    form { text-align:center; margin:20px 0; }
+    input[type=number] { padding:10px; width:120px; border:none; border-radius:4px; }
+    button { padding:10px 20px; background:#e50914; border:none; color:#fff; font-size:1rem; border-radius:4px; cursor:pointer; }
+    section { padding:20px; }
+    h2.section-title { margin:0 0 10px; font-size:1.5rem; }
+    .row { display:flex; overflow-x:auto; padding-bottom:10px; }
+    .row::-webkit-scrollbar { height:8px; }
+    .row::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.3); border-radius:4px; }
+    .card { position:relative; flex:0 0 auto; width:160px; margin-right:10px; transition: transform .2s; }
+    .card img { width:100%; border-radius:4px; }
+    .card:hover { transform: scale(1.08); }
+    .overlay { position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,0.7); padding:4px 6px; border-radius:2px; font-size:0.85rem; }
+    table { width:100%; border-collapse:collapse; margin-bottom:20px; }
+    th, td { padding:8px; border-bottom:1px solid #333; text-align:center; }
+    th { background:#222; }
+  </style>
+</head>
+<body>
+  <header>🎬 Movie Recommendations</header>
+
+  <form method="post">
+    <input type="number" name="user_id" min="1" placeholder="User ID" required>
+    <button type="submit">Show Recs</button>
+  </form>
+
+  {% if eval_results %}
+  <section>
+    <h2 class="section-title">Model Performance Analysis</h2>
+    <table>
+      <tr>
+        <th>Model</th><th>RMSE</th><th>MAE</th><th>Prec@10</th><th>Rec@10</th>
+      </tr>
+      {% for r in eval_results %}
+      <tr>
+        <td>{{ r.Model }}</td>
+        <td>{{ '%.3f'|format(r.RMSE) if r.RMSE is not none else '-' }}</td>
+        <td>{{ '%.3f'|format(r.MAE) if r.MAE is not none else '-' }}</td>
+        <td>{{ '%.3f'|format(r['Prec@10']) if r['Prec@10'] is not none else '-' }}</td>
+        <td>{{ '%.3f'|format(r['Rec@10']) if r['Rec@10'] is not none else '-' }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p>{{ summary_text }}</p>
+  </section>
+  {% endif %}
+
+  {% if user_id %}
+  <section>
+    {% for model, recs in recs_by_model.items() %}
+      <h2 class="section-title">{{ model }}</h2>
+      <div class="row">
+        {% for rec in recs %}
+        <div class="card">
+          <img src="{{ rec.poster_url }}" alt="{{ rec.title }}">
+          <div class="overlay">{{ rec.est }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+</body>
+</html>
