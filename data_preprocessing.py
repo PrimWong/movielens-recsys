@@ -4,8 +4,6 @@ from surprise import Dataset, Reader
 def load_movielens(path: str, dataset='100K'):
     """
     Load MovieLens data from a local path into a Surprise Dataset.
-      - dataset: '100K' or '1M'
-      - path: root folder, e.g., 'data/MovieLens_100K' or 'data/MovieLens_1M'
     """
     if dataset == '100K':
         ratings_file = f'{path}/u.data'

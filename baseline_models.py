@@ -15,8 +15,8 @@ class PopularityRecommender:
         grp = ratings_df.groupby('movieId')['rating']
         counts = grp.count()
         means  = grp.mean()
-        # filter low‑count items if desired
-        if self.min_ratings > 0:
+        # filter low‑count items 
+        if self.min_ratings > 10:
             means = means[counts >= self.min_ratings]
         self.pop_scores = means.sort_values(ascending=False)
 
