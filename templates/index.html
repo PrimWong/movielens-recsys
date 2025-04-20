@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Movie Recommendation System</title>
-  <link rel="stylesheet" href="/static/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Movie Recommendations</title>
+  <style>
+    body{margin:0;background:#141414;color:#fff;font-family:sans-serif;}
+    header{padding:20px;text-align:center;font-size:2rem;}
+    form{text-align:center;margin:20px 0;}
+    input,button{padding:10px;border:none;border-radius:4px;}
+    button{background:#e50914;color:#fff;cursor:pointer;}
+    section{padding:0 20px 20px;}
+    h2{margin:20px 0 10px;font-size:1.5rem;}
+    .row{display:flex;overflow-x:auto;gap:10px;}
+    .card{flex:0 0 auto;background:#222;padding:10px;min-width:200px;border-radius:4px;}
+    .card h3{margin:0 0 5px;font-size:1rem;}
+    .card p{margin:0;color:#ccc;}
+    table{width:100%;border-collapse:collapse;margin-bottom:20px;}
+    th,td{padding:8px;border-bottom:1px solid #333;text-align:center;}
+    th{background:#222;}
+  </style>
 </head>
 <body>
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="overlay"></div>
-    <div class="hero-content">
-      <img src="/static/images/cmkl_logo.png" alt="CMKL Logo" class="logo" />
-      <p class="course-title">AIC-601 SPRING 2025 | AI APPLICATIONS ELECTIVE</p>
-      <h1 class="hero-title">
-        Movie<br />
-        <span class="highlight">Recommendation</span><br />
-        System
-      </h1>
-      <p class="subtitle">Your personalized suggestions powered by</p>
-      <h2 class="dataset">MovieLens Dataset</h2>
-      <p class="author">by Prim Rajasurang Wongkrasaemongkol</p>
-    </div>
+  <header>🎬 Movie Recommendations</header>
+  <form method="post">
+    <input type="number" name="user_id" placeholder="User ID" required>
+    <button type="submit">Show Recs</button>
+  </form>
+
+  {% if eval_results %}
+  <section>
+    <h2>Model Performance Analysis</h2>
+    <table>
+      <tr><th>Model</th><th>RMSE</th><th>MAE</th><th>Prec@10</th><th>Rec@10</th></tr>
+      {% for r in eval_results %}
+      <tr>
+        <td>{{ r.Model }}</td>
+        <td>{{ '%.3f'|format(r.RMSE) if r.RMSE is not none else '-' }}</td>
+        <td>{{ '%.3f'|format(r.MAE) if r.MAE is not none else '-' }}</td>
+        <td>{{ '%.3f'|format(r['Prec@10']) if r['Prec@10'] is not none else '-' }}</td>
+        <td>{{ '%.3f'|format(r['Rec@10']) if r['Rec@10'] is not none else '-' }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <p>{{ summary_text }}</p>
   </section>
+  {% endif %}
 
-  <!-- Main Recommendation Panel -->
-  <main class="container">
-    <section class="selection">
-      <h3>Choose a Model & Get Recommendations</h3>
-      <form method="post" class="form-inline">
-        <input type="number" name="user_id" min="1" placeholder="Enter User ID" required />
-        <select name="model">
-          {% for m in model_names %}
-          <option value="{{ m }}" {% if m == selected %}selected{% endif %}>{{ m }}</option>
-          {% endfor %}
-        </select>
-        <button type="submit" class="btn">Recommend</button>
-      </form>
-    </section>
-
-    {% if recs %}
-    <section class="results">
-      <h4 class="results-title">
-        Recommendations for user <strong>{{ request.form.user_id }}</strong> using <strong>{{ selected }}</strong>:
-      </h4>
-      <div class="carousel">
-        {% for r in recs %}
-        <a href="{{ r.imdb }}" target="_blank" class="card">
-          <img class="poster" src="{{ r.poster }}" alt="{{ r.title }}" />
-          <div class="info">
-            <h5>{{ r.title }}</h5>
-            <span class="est">Rating: {{ r.est }}</span>
-          </div>
-        </a>
+  {% if user_id %}
+  <section>
+    {% for model,recs in recs_by_model.items() %}
+      <h2>{{ model }}</h2>
+      <div class="row">
+        {% for rec in recs %}
+        <div class="card">
+          <h3>{{ rec.title }}</h3>
+          <p>Est: {{ rec.est }}</p>
+        </div>
         {% endfor %}
       </div>
-    </section>
-    {% endif %}
-  </main>
+    {% endfor %}
+  </section>
+  {% endif %}
 </body>
 </html>
