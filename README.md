@@ -4,6 +4,7 @@ This project uses the MovieLens‑100K dataset. The dataset contains 100,000 rat
 
 Movie recommendation system : https://youtu.be/t34LVX_d5P8
 
+![image](https://github.com/user-attachments/assets/2b6a8244-1d16-4eb8-be68-730d10ff34e0)
 
 ![image](https://github.com/user-attachments/assets/063affa1-5077-41c6-b1da-f439d3af125b)
 
