@@ -1,6 +1,10 @@
 # Movielens Recommendation System
 This project uses the MovieLens‑100K dataset. The dataset contains 100,000 ratings from 943 users on 1,682 movies, it is lightweight, fast to load and iterate.
 
+
+Movie recommendation system : https://youtu.be/t34LVX_d5P8
+
+
 ![image](https://github.com/user-attachments/assets/063affa1-5077-41c6-b1da-f439d3af125b)
 
 ## Overview
@@ -37,13 +41,8 @@ This project explores several recommendation strategies on the MovieLens dataset
    ```bash
    git clone https://github.com/yourusername/movielens-recsys.git
    cd movielens-recsys
-   
-```
-set FLASK_APP=app.py
-flask run
-```
 
+  set FLASK_APP=app.py
+  flask run
 
-Movie recommendation system
-https://youtu.be/t34LVX_d5P8
 
