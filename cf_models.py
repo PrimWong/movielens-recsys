@@ -2,7 +2,7 @@ from surprise import KNNBasic
 
 def build_user_cf(trainset, sim_options=None):
     """
-    User–User Collaborative Filtering.
+    User-User Collaborative Filtering.
     """
     if sim_options is None:
         sim_options = {'name': 'cosine', 'user_based': True}
@@ -12,7 +12,7 @@ def build_user_cf(trainset, sim_options=None):
 
 def build_item_cf(trainset, sim_options=None):
     """
-    Item–Item Collaborative Filtering.
+    Item-Item Collaborative Filtering.
     """
     if sim_options is None:
         sim_options = {'name': 'cosine', 'user_based': False}
